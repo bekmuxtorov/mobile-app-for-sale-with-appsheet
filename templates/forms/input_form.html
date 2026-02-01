@@ -6,9 +6,10 @@
 <div class="card">
     <div style="text-align: center; margin-bottom: 2rem;">
         <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">{{ title|default:"Add New" }}</h2>
-        <div style="height: 4px; width: 40px; background: var(--primary-gradient); border-radius: 2px; margin: 0 auto;"></div>
+        <div style="height: 4px; width: 40px; background: var(--primary-gradient); border-radius: 2px; margin: 0 auto;">
+        </div>
     </div>
-    
+
     <form method="post">
         {% csrf_token %}
         {% for field in form %}
@@ -16,35 +17,56 @@
             <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
             {{ field }}
             {% if field.errors %}
-                <div style="color:var(--danger-color); font-size:0.8rem; margin-top: 5px;">
-                    {% for error in field.errors %}
-                        {{ error }}
-                    {% endfor %}
-                </div>
+            <div style="color:var(--danger-color); font-size:0.8rem; margin-top: 5px;">
+                {% for error in field.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
             {% endif %}
             {% if field.help_text %}
-                <div style="color:var(--text-secondary); font-size:0.8rem; margin-top: 5px;">{{ field.help_text }}</div>
+            <div style="color:var(--text-secondary); font-size:0.8rem; margin-top: 5px;">{{ field.help_text }}</div>
             {% endif %}
         </div>
         {% endfor %}
-        
+
         <div style="margin-top: 2rem;">
             <button type="submit" class="btn btn-primary">
                 <ion-icon name="checkmark-circle-outline" style="margin-right: 8px; font-size: 1.2rem;"></ion-icon>
                 Save
             </button>
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+            <a href="{% url 'input_list' %}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
+
+    {% if object %}
+    <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+        <form action="{% url 'delete_input' object.pk %}" method="post"
+            onsubmit="return confirm('Haqiqatan ham ushbu kirimni o\'chirmoqchimisiz?');">
+            {% csrf_token %}
+            <button type="submit" class="btn"
+                style="background: rgba(239, 68, 68, 0.1); color: #EF4444; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                <ion-icon name="trash-outline"></ion-icon>
+                O'chirish
+            </button>
+        </form>
+    </div>
+    {% endif %}
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         function calculateSumma() {
-            var qty = parseFloat($('#id_quantity').val()) || 0;
-            var price = parseFloat($('#id_price').val()) || 0;
+            var qtyStr = $('#id_quantity').val().replace(/,/g, '');
+            var priceStr = $('#id_price').val().replace(/,/g, '');
+
+            var qty = parseFloat(qtyStr) || 0;
+            var price = parseFloat(priceStr) || 0;
             var sum = qty * price;
-            $('#id_summa').val(sum.toFixed(2));
+
+            // Format result
+            var parts = sum.toFixed(2).split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            $('#id_summa').val(parts.join("."));
         }
 
         $('#id_quantity, #id_price').on('input keyup change', calculateSumma);

@@ -33,6 +33,7 @@ def output_list(request):
         'total_sum': total_sum,
         'add_url': '/orders/add/',
         'detail_url_name': 'output_detail',  # To link in template
+        'delete_url_name': 'delete_output',
     }
     return render(request, 'lists/generic_list.html', context)
 
@@ -73,3 +74,13 @@ def output_detail(request, pk):
         'title': 'Edit Sale (Chiqim)',
         'object': output_obj
     })
+
+
+@login_required
+def delete_output(request, pk):
+    output_obj = get_object_or_404(Output, pk=pk)
+    if request.method == 'POST':
+        output_obj.delete()
+        messages.success(request, 'Sale Output deleted successfully!')
+        return redirect('output_list')
+    return redirect('output_list')

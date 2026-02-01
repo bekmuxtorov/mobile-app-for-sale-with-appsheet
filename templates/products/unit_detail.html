@@ -29,4 +29,16 @@
     </button>
 </form>
 
+<div class="card" style="margin-top: 1rem; padding: 1rem;">
+    <form action="{% url 'delete_unit' unit.pk %}" method="post"
+        onsubmit="return confirm('Haqiqatan ham ushbu birlikni o\'chirmoqchimisiz?');" style="margin: 0;">
+        {% csrf_token %}
+        <button type="submit" class="btn"
+            style="background: rgba(239, 68, 68, 0.1); color: #EF4444; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <ion-icon name="trash-outline"></ion-icon>
+            O'chirish
+        </button>
+    </form>
+</div>
+
 {% endblock %}

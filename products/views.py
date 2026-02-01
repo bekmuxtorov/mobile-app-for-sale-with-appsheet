@@ -98,3 +98,23 @@ def unit_detail(request, pk):
         messages.success(request, 'Unit updated successfully!')
         return redirect('unit_list')
     return render(request, 'products/unit_detail.html', {'unit': unit})
+
+
+@login_required
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, 'Product deleted successfully!')
+        return redirect('product_list')
+    return redirect('product_list')
+
+
+@login_required
+def delete_unit(request, pk):
+    unit = get_object_or_404(Unit, pk=pk)
+    if request.method == 'POST':
+        unit.delete()
+        messages.success(request, 'Unit deleted successfully!')
+        return redirect('unit_list')
+    return redirect('unit_list')

@@ -5,64 +5,76 @@
 
 {% block content %}
 <div style="margin-bottom: 5rem;"> <!-- Extra space for FAB and Nav -->
-    
+
     <div style="text-align: center; margin-bottom: 1.5rem;">
         <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">{{ title }}</h2>
-        <div style="height: 4px; width: 40px; background: var(--primary-gradient); border-radius: 2px; margin: 0 auto;"></div>
+        <div style="height: 4px; width: 40px; background: var(--primary-gradient); border-radius: 2px; margin: 0 auto;">
+        </div>
     </div>
 
     <!-- Date Filter -->
     <form method="get" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem;">
-        <input type="date" name="date" value="{{ date_filter }}" class="form-control" onchange="this.form.submit()" style="background: var(--card-bg); border-color: transparent;">
+        <input type="date" name="date" value="{{ date_filter }}" class="form-control" onchange="this.form.submit()"
+            style="background: var(--card-bg); border-color: transparent;">
         {% if date_filter %}
-            <a href="?" class="btn" style="width: auto; padding: 0.75rem; background: var(--card-bg); color: var(--text-secondary);">
-                <ion-icon name="close-outline"></ion-icon>
-            </a>
+        <a href="?" class="btn"
+            style="width: auto; padding: 0.75rem; background: var(--card-bg); color: var(--text-secondary);">
+            <ion-icon name="close-outline"></ion-icon>
+        </a>
         {% endif %}
     </form>
 
     <!-- List Items -->
     {% if items %}
-        {% for item in items %}
-        <a href="{% url detail_url_name item.pk %}" class="card" style="padding: 1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit;">
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-secondary);">
-                    {% if item.product.image %}
-                        <img src="{{ item.product.image.url }}" alt="" style="width:100%; height:100%; object-fit:cover; border-radius: 12px;">
-                    {% else %}
-                        <ion-icon name="cube-outline"></ion-icon>
-                    {% endif %}
-                </div>
-                <div>
-                    <div style="font-weight: 600; font-size: 1rem; color: var(--text-main);">{{ item.product.name }}</div>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary);">
-                        {{ item.quantity|intcomma }} {{ item.product.unit.name|default:"dona" }} x {{ item.price|default:0|intcomma }}
-                    </div>
-                </div>
+    {% for item in items %}
+    <div class="card"
+        style="padding: 1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="{% url detail_url_name item.pk %}"
+            style="display: flex; gap: 1rem; align-items: center; flex: 1; text-decoration: none; color: inherit;">
+            <div
+                style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-secondary);">
+                {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt=""
+                    style="width:100%; height:100%; object-fit:cover; border-radius: 12px;">
+                {% else %}
+                <ion-icon name="cube-outline"></ion-icon>
+                {% endif %}
             </div>
-            <div style="text-align: right;">
-                <div style="font-weight: 700; font-size: 1rem; color: var(--text-main);">{{ item.summa|default:0|intcomma }}</div>
-                <div style="font-size: 0.7rem; color: var(--text-secondary);">{{ item.created_at|date:"d/m/Y H:i:s" }}</div>
+            <div>
+                <div style="font-weight: 600; font-size: 1rem; color: var(--text-main);">{{ item.product.name }}
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                    {{ item.quantity|intcomma }} {{ item.product.unit.name|default:"dona" }} x
+                    {{item.price|default:0|intcomma }}
+                </div>
             </div>
         </a>
-        {% endfor %}
-        
-        <!-- Summary for filtered list -->
-        <div style="text-align: center; margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
-            Total: <strong>{{ total_sum|default:0|intcomma }} UZS</strong>
+
+        <div style="text-align: right;">
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text-main);">{{ item.summa|default:0|intcomma }}
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-secondary);">{{ item.created_at|date:"d/m/Y H:i:s" }}</div>
         </div>
+    </div>
+    {% endfor %}
+
+    <!-- Summary for filtered list -->
+    <div style="text-align: center; margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+        Total: <strong>{{ total_sum|default:0|intcomma }} UZS</strong>
+    </div>
 
     {% else %}
-        <div style="text-align: center; color: var(--text-secondary); margin-top: 3rem;">
-            <ion-icon name="file-tray-outline" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></ion-icon>
-            <p>No records found for this date.</p>
-        </div>
+    <div style="text-align: center; color: var(--text-secondary); margin-top: 3rem;">
+        <ion-icon name="file-tray-outline" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></ion-icon>
+        <p>No records found for this date.</p>
+    </div>
     {% endif %}
 
 </div>
 
 <!-- Floating Action Button (FAB) -->
-<a href="{{ add_url }}" style="position: fixed; bottom: 100px; right: 20px; width: 56px; height: 56px; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); z-index: 90; text-decoration: none;">
+<a href="{{ add_url }}"
+    style="position: fixed; bottom: 100px; right: 20px; width: 56px; height: 56px; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); z-index: 90; text-decoration: none;">
     <ion-icon name="add-outline"></ion-icon>
 </a>
 {% endblock %}

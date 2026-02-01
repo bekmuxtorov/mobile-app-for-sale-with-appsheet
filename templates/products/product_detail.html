@@ -24,7 +24,7 @@
         <select name="unit" class="form-control" style="width: 100%;">
             <option value="">---------</option>
             {% for unit in units %}
-            <option value="{{ unit.id }}" {% if product.unit_id == unit.id %}selected{% endif %}>{{ unit.name }}
+            <option value="{{ unit.id }}" {% if product.unit_id==unit.id %}selected{% endif %}>{{ unit.name }}
             </option>
             {% endfor %}
         </select>
@@ -41,5 +41,17 @@
         Save Changes
     </button>
 </form>
+
+<div class="card" style="margin-top: 1rem; padding: 1rem;">
+    <form action="{% url 'delete_product' product.pk %}" method="post"
+        onsubmit="return confirm('Haqiqatan ham ushbu tovarni o\'chirmoqchimisiz?');" style="margin: 0;">
+        {% csrf_token %}
+        <button type="submit" class="btn"
+            style="background: rgba(239, 68, 68, 0.1); color: #EF4444; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <ion-icon name="trash-outline"></ion-icon>
+            O'chirish
+        </button>
+    </form>
+</div>
 
 {% endblock %}

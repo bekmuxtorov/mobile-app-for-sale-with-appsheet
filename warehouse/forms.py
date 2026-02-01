@@ -8,7 +8,7 @@ class InputForm(forms.ModelForm):
         fields = ['product', 'quantity', 'price', 'summa']
         widgets = {
             'product': forms.Select(attrs={'class': 'form-control'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control', 'id': 'id_quantity'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control', 'id': 'id_price'}),
-            'summa': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly', 'id': 'id_summa'}),
+            'quantity': forms.TextInput(attrs={'class': 'form-control comma-number', 'id': 'id_quantity', 'inputmode': 'decimal'}),
+            'price': forms.TextInput(attrs={'class': 'form-control comma-number', 'id': 'id_price', 'inputmode': 'decimal'}),
+            'summa': forms.TextInput(attrs={'class': 'form-control comma-number', 'readonly': 'readonly', 'id': 'id_summa'}),
         }

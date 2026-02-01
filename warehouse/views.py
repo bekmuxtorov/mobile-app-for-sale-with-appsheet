@@ -33,6 +33,7 @@ def input_list(request):
         'total_sum': total_sum,
         'add_url': '/warehouse/add/',
         'detail_url_name': 'input_detail',  # To link in template
+        'delete_url_name': 'delete_input',
     }
     return render(request, 'lists/generic_list.html', context)
 
@@ -73,3 +74,13 @@ def input_detail(request, pk):
         'title': 'Edit Stock (Kirim)',
         'object': input_obj  # Pass object if needed for extra info
     })
+
+
+@login_required
+def delete_input(request, pk):
+    input_obj = get_object_or_404(Input, pk=pk)
+    if request.method == 'POST':
+        input_obj.delete()
+        messages.success(request, 'Stock Input deleted successfully!')
+        return redirect('input_list')
+    return redirect('input_list')

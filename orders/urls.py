@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.output_list, name='output_list'),
     path('add/', views.add_output, name='add_output'),
     path('<int:pk>/', views.output_detail, name='output_detail'),
+    path('<int:pk>/delete/', views.delete_output, name='delete_output'),
 ]

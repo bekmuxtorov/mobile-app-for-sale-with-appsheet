@@ -79,3 +79,13 @@ def customer_detail(request, pk):
         messages.success(request, 'Customer updated successfully!')
         return redirect('customer_list')
     return render(request, 'users/customer_detail.html', {'customer': customer})
+
+
+@login_required
+def delete_customer(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    if request.method == 'POST':
+        customer.delete()
+        messages.success(request, 'Customer deleted successfully!')
+        return redirect('customer_list')
+    return redirect('customer_list')
