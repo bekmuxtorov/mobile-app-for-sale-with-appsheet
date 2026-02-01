@@ -6,6 +6,7 @@ from django.utils import timezone
 from .models import Customer
 from .forms import CustomerForm
 from warehouse.models import Input
+from products.models import Product
 from orders.models import Output
 
 
@@ -26,10 +27,17 @@ def dashboard(request):
     total_input = Input.objects.aggregate(Sum('summa'))['summa__sum'] or 0
     total_output = Output.objects.aggregate(Sum('summa'))['summa__sum'] or 0
 
+    # Products with inputs today
+    today_input_products = Input.objects.filter(
+        created_at__date=today).values_list('product_id', flat=True).distinct()
+    top_products = Product.objects.filter(
+        id__in=today_input_products).order_by('-stock_quantity')[:5]
+
     context = {
         'customer_count': Customer.objects.count(),
         'today_output': today_output,
         'total_input': total_input,
+        'top_products': top_products,
     }
     return render(request, 'dashboard.html', context)
 

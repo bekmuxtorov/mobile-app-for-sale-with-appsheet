@@ -8,16 +8,19 @@
 <!-- Hero Card: Total Balance / KPI -->
 <div class="hero-card">
     <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.5rem;">Bugungi Savdo (Chiqim)</div>
-    <div style="font-size: 2.5rem; font-weight: 700;">{{ today_output|default:0|intcomma }} UZS</div>
+    <div style="font-size: 2.5rem; font-weight: 700;">{{ today_output|default:0|intcomma }} <span
+            style="font-size: 1rem; font-weight: 500;">uzs</span></div>
 
     <div style="display: flex; justify-content: space-between; margin-top: 1rem; font-size: 0.9rem;">
         <div>
             <div style="opacity: 0.7;">Umumiy Kirim</div>
-            <div style="font-weight: 600; color: #10B981;">{{ total_input|default:0|intcomma }} UZS</div>
+            <div style="font-weight: 600; color: #10B981;">{{ total_input|default:0|intcomma }} <span
+                    style="font-size: 0.75rem;">uzs</span></div>
         </div>
         <div style="text-align: right;">
             <div style="opacity: 0.7;">Qoldiq (Kirim - Chiqim)</div>
-            <div style="font-weight: 600; color: #10B981;">{{ general_diff|default:0|intcomma }} UZS</div>
+            <div style="font-weight: 600; color: #10B981;">{{ general_diff|default:0|intcomma }} <span
+                    style="font-size: 0.75rem;">uzs</span></div>
         </div>
     </div>
 
@@ -35,8 +38,8 @@
 
 <!-- Quick Actions Grid (Horizontal Scroll) -->
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-    <h3 style="font-size: 1.1rem;">Quick Actions</h3>
-    <a href="#" style="font-size: 0.9rem; color: var(--primary-color); text-decoration: none;">See all</a>
+    <h3 style="font-size: 1.1rem;">Ma'lumotnomalar</h3>
+    <a href="#" style="font-size: 0.9rem; color: var(--primary-color); text-decoration: none;">Ko'rish</a>
 </div>
 
 <div class="action-grid">
@@ -44,49 +47,53 @@
         <div class="action-icon-box">
             <ion-icon name="cube-outline"></ion-icon>
         </div>
-        <span class="action-label">Products</span>
+        <span class="action-label">Tovarlar</span>
     </a>
 
     <a href="{% url 'customer_list' %}" class="action-btn">
         <div class="action-icon-box">
             <ion-icon name="people-outline"></ion-icon>
         </div>
-        <span class="action-label">People</span>
+        <span class="action-label">Mijozlar</span>
     </a>
 
     <a href="{% url 'unit_list' %}" class="action-btn">
         <div class="action-icon-box">
             <ion-icon name="scale-outline"></ion-icon>
         </div>
-        <span class="action-label">Units</span>
-    </a>
-
-    <!-- Duplicate for scroll effect demo -->
-    <a href="#" class="action-btn">
-        <div class="action-icon-box" style="color: var(--text-secondary);">
-            <ion-icon name="ellipsis-horizontal"></ion-icon>
-        </div>
-        <span class="action-label">More</span>
+        <span class="action-label">Birliklar</span>
     </a>
 </div>
 
 <!-- Recent Transactions / Stats -->
-<h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Overview</h3>
+<h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Umumiy ko'rinish</h3>
 
 <div class="card" style="padding: 0;">
     <div
-        style="padding: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <div
-                style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); color: var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                <ion-icon name="people"></ion-icon>
-            </div>
-            <div>
-                <div style="font-weight: 600;">Total Customers</div>
-                <div style="font-size: 0.8rem; color: var(--text-secondary);">Active database</div>
+        style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+        <span>Bugungi Kirimlar (Top 5)</span>
+        <a href="{% url 'product_sales_report' %}"
+            style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none;">Barchasini ko'rish</a>
+    </div>
+
+    {% for product in top_products %}
+    <div
+        style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 1rem;">
+        <div
+            style="width: 40px; height: 40px; background: rgba(99, 102, 241, 0.1); color: #6366F1; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <div style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 600;">{{ product.name }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                Omborda: {{ product.stock_quantity }} {{product.unit.name|default:"" }}
             </div>
         </div>
-        <div style="font-weight: 600;">{{ customer_count }}</div>
     </div>
+    {% empty %}
+    <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+        Bugun kirimlar yo'q
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

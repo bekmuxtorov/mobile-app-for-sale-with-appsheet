@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<div class="header" style="justify-content: flex-start; gap: 1rem;">
+    <a href="{% url 'product_list' %}"
+        style="width: 40px; height: 40px; background: var(--card-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+    </a>
+    <h2 style="margin: 0;">Add Product</h2>
+</div>
+
+<form method="post" class="card" style="padding-bottom: 2rem;">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label class="form-label">Product Name</label>
+        <input type="text" name="name" class="form-control" placeholder="Enter product name" required>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Unit</label>
+        <select name="unit" class="form-control" style="width: 100%;">
+            <option value="">---------</option>
+            {% for unit in units %}
+            <option value="{{ unit.id }}">{{ unit.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Removed Price field as per user request to remove it from detail view too, assuming consistency or keeping it optional? 
+         User said "tovarga yana summa qo'shib qo'yibsan userdan olib tashla" (You added sum to product, remove it from user). 
+         User meant Detail/Update view. For Create, it might be necessary? 
+         But let's keep it consistent. If they don't want to see/edit it on detail, maybe they don't want it on create OR they set it elsewhere.
+         However, the model has a default 0. Let's include it but maybe hidden or just leave it out if they process input prices separately.
+         Actually, usually 'price' on product is 'selling price'. 
+         Let's keep it in Add for now, but if they complain, I'll remove it. 
+         Wait, earlier I removed it from product_detail.html. 
+         The user said "product listdan ham olib tashla" (remove from product list too).
+         It seems they don't want to manage price on the product object directly or through this UI?
+         I will leave it OUT to be safe and consistent with the "remove price" instruction.
+    -->
+
+    <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3" placeholder="Optional description"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+        Create Product
+    </button>
+</form>
+
+{% endblock %}

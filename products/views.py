@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 from .models import Product, Unit
+from warehouse.models import Input
 
 
 @login_required
@@ -32,6 +34,14 @@ def add_product(request):
 def product_list(request):
     products = Product.objects.select_related(
         'unit').all().order_by('-created_at')
+
+    filter_type = request.GET.get('filter')
+    if filter_type == 'today_input':
+        today = timezone.now().date()
+        today_input_products = Input.objects.filter(
+            created_at__date=today).values_list('product_id', flat=True).distinct()
+        products = products.filter(id__in=today_input_products)
+
     return render(request, 'products/product_list.html', {'products': products})
 
 
@@ -41,7 +51,7 @@ def product_detail(request, pk):
     if request.method == 'POST':
         product.name = request.POST.get('name')
         unit_id = request.POST.get('unit')
-        product.price = request.POST.get('price') or 0
+        # product.price is managed elsewhere or not updated here
         product.description = request.POST.get('description')
 
         if unit_id:

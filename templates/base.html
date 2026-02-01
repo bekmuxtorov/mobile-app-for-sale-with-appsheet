@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,8 +8,10 @@
     <!-- Google Fonts: Outfit for that modern tech feel, Inter as fallback -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
     <!-- Flatpickr for 24h Date Picking -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
@@ -16,7 +19,7 @@
     <!-- Ionicons for premium icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    
+
     <!-- jQuery & Select2 for Searchable Dropdowns -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -25,15 +28,18 @@
     <style>
         :root {
             /* Dark Theme Colors */
-            --bg-color: #0F0F12;      /* Deep Black/Grey */
-            --card-bg: #1C1C1E;       /* Lighter Grey for cards */
-            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); /* Indigo to Purple */
+            --bg-color: #0F0F12;
+            /* Deep Black/Grey */
+            --card-bg: #1C1C1E;
+            /* Lighter Grey for cards */
+            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            /* Indigo to Purple */
             --text-main: #FFFFFF;
             --text-secondary: #9CA3AF;
             --border-color: #2D2D30;
             --input-bg: #2C2C2E;
             --success-color: #10B981;
-            
+
             /* Spacing */
             --container-padding: 1.5rem;
             --radius-xl: 1.5rem;
@@ -46,37 +52,46 @@
             background-color: var(--input-bg);
             border: 1px solid transparent;
             border-radius: var(--radius-lg);
-            height: 50px; /* Match form-control height */
+            height: 50px;
+            /* Match form-control height */
             display: flex;
             align-items: center;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             color: white;
             padding-left: 1rem;
             line-height: normal;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 48px;
             right: 10px;
         }
+
         .select2-dropdown {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
         }
+
         .select2-container--default .select2-search--dropdown .select2-search__field {
             background-color: var(--input-bg);
             color: white;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
         }
+
         .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
-            background-color: #6366F1; /* Primary color */
+            background-color: #6366F1;
+            /* Primary color */
             color: white;
         }
+
         .select2-container--default .select2-results__option--selected {
             background-color: rgba(99, 102, 241, 0.2);
         }
+
         .select2-results__option {
             color: white;
         }
@@ -87,6 +102,7 @@
             border-collapse: collapse;
             font-size: 0.9rem;
         }
+
         .table-minimal th {
             text-align: left;
             padding: 1rem;
@@ -94,14 +110,17 @@
             font-weight: 500;
             border-bottom: 2px solid var(--border-color);
         }
+
         .table-minimal td {
             padding: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text-main);
         }
+
         .table-minimal tr:last-child td {
             border-bottom: none;
         }
+
         .table-container {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
@@ -111,7 +130,7 @@
 
         * {
             box-sizing: border-box;
-            margin: 0; 
+            margin: 0;
             padding: 0;
             font-family: 'Outfit', 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
@@ -123,13 +142,15 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-bottom: 80px; /* Space for bottom nav */
+            padding-bottom: 80px;
+            /* Space for bottom nav */
         }
 
         /* Container */
         .container {
             width: 100%;
-            max-width: 480px; /* Strict mobile width */
+            max-width: 480px;
+            /* Strict mobile width */
             margin: 0 auto;
             padding: var(--container-padding);
             flex: 1;
@@ -140,16 +161,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 0;
             margin-bottom: 1rem;
         }
-        
+
         .user-profile {
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
-        
+
         .avatar {
             width: 40px;
             height: 40px;
@@ -166,7 +186,7 @@
             font-weight: 600;
             font-size: 1.1rem;
         }
-        
+
         .notification-btn {
             background: var(--card-bg);
             border: none;
@@ -200,7 +220,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .hero-card::after {
             content: '';
             position: absolute;
@@ -268,7 +288,7 @@
         .btn-primary:active {
             transform: scale(0.98);
         }
-        
+
         .btn-secondary {
             background: var(--card-bg);
             color: var(--text-main);
@@ -276,9 +296,20 @@
         }
 
         /* Typography */
-        h1, h2, h3 { font-weight: 700; letter-spacing: -0.5px; }
-        .text-center { text-align: center; }
-        .text-muted { color: var(--text-secondary); }
+        h1,
+        h2,
+        h3 {
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: var(--text-secondary);
+        }
 
         /* Bottom Nav */
         .bottom-nav {
@@ -295,9 +326,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             z-index: 100;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .nav-item {
@@ -314,7 +345,7 @@
             color: white;
             transform: translateY(-2px);
         }
-        
+
         .nav-item.active::after {
             content: '';
             width: 4px;
@@ -323,7 +354,7 @@
             border-radius: 50%;
             margin-top: 4px;
         }
-        
+
         /* Dashboard Grid */
         .action-grid {
             display: flex;
@@ -335,7 +366,10 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        .action-grid::-webkit-scrollbar { display: none; }
+
+        .action-grid::-webkit-scrollbar {
+            display: none;
+        }
 
         .action-btn {
             min-width: 80px;
@@ -356,10 +390,10 @@
             justify-content: center;
             font-size: 1.5rem;
             color: white;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: 0.2s;
         }
-        
+
         .action-btn:active .action-icon-box {
             background: #2C2C2E;
             transform: scale(0.95);
@@ -370,9 +404,9 @@
             color: var(--text-secondary);
             font-weight: 500;
         }
-
     </style>
 </head>
+
 <body>
 
     <div class="container">
@@ -383,7 +417,7 @@
                     {{ user.full_name|first|upper }}
                 </div>
                 <div>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Welcome back</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Dasturga xush kelibsiz</div>
                     <div class="user-name">{{ user.full_name }}</div>
                 </div>
             </div>
@@ -400,25 +434,29 @@
     {% if user.is_authenticated %}
     <div class="bottom-nav">
         <!-- Dashboard -->
-        <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <a href="{% url 'dashboard' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
             <ion-icon name="grid-outline"></ion-icon>
         </a>
-        
+
         <!-- Action Menu (Kirim/Chiqim) -->
-        <a href="{% url 'input_list' %}" class="nav-item {% if 'input' in request.resolver_match.url_name %}active{% endif %}">
+        <a href="{% url 'input_list' %}"
+            class="nav-item {% if 'input' in request.resolver_match.url_name %}active{% endif %}">
             <ion-icon name="arrow-down-circle-outline"></ion-icon>
         </a>
-        
+
         <!-- Center Action (Add Sales - Main) -->
-        <a href="{% url 'output_list' %}" class="nav-item" style="background:var(--primary-gradient); padding: 12px; border-radius: 50%; color: white; margin-top: -30px; border: 4px solid var(--bg-color); {% if 'output' in request.resolver_match.url_name %}box-shadow: 0 0 0 2px var(--primary-color);{% endif %}">
+        <a href="{% url 'output_list' %}" class="nav-item"
+            style="background:var(--primary-gradient); padding: 12px; border-radius: 50%; color: white; margin-top: -30px; border: 4px solid var(--bg-color); {% if 'output' in request.resolver_match.url_name %}box-shadow: 0 0 0 2px var(--primary-color);{% endif %}">
             <ion-icon name="paper-plane-outline"></ion-icon>
         </a>
-        
+
         <!-- Reports -->
-        <a href="{% url 'customer_sales_report' %}" class="nav-item {% if 'report' in request.resolver_match.url_name %}active{% endif %}">
+        <a href="{% url 'customer_sales_report' %}"
+            class="nav-item {% if 'report' in request.resolver_match.url_name %}active{% endif %}">
             <ion-icon name="stats-chart-outline"></ion-icon>
         </a>
-        
+
         <!-- Logout -->
         <form action="{% url 'logout' %}" method="post" style="display:contents;">
             {% csrf_token %}
@@ -430,7 +468,7 @@
     {% endif %}
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Apply Select2 to all select elements
             $('select').select2({
                 width: '100%',
@@ -441,4 +479,5 @@
     </script>
 
 </body>
+
 </html>
