@@ -286,6 +286,7 @@ def product_sales_report(request):
         'selected_product': int(product_id) if product_id else None,
         'grand_total_in_sum': grand_total_in_sum,
         'grand_total_out_sum': grand_total_out_sum,
+        'grand_difference': grand_total_out_sum - grand_total_in_sum,
         'title': 'Tovar aylanma hisoboti'
     }
     return render(request, 'reports/product_sales_report.html', context)

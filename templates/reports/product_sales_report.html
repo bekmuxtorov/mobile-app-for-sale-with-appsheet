@@ -63,16 +63,16 @@
     <!-- Results Summary -->
     <div style="margin: 1.5rem 0; background: var(--card-bg); padding: 1rem; border-radius: var(--radius-lg);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-            <div style="font-size: 0.9rem; color: var(--text-secondary);">Jami savdo:</div>
-            <div style="font-size: 1.25rem; font-weight: 700; color: white;">{{ total_sum|intcomma }} UZS</div>
+            <div style="font-size: 0.9rem; color: var(--text-secondary);">Umumiy Kirim:</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #10B981;">{{ grand_total_in_sum|intcomma }} UZS</div>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.9rem;">
-            <div style="color: var(--text-secondary);">To'lanmagan (Qarz):</div>
-            <div style="font-weight: 600; color: #EF4444;">{{ total_unpaid|intcomma }} UZS</div>
+            <div style="color: var(--text-secondary);">Umumiy Chiqim:</div>
+            <div style="font-weight: 600; color: #EF4444;">{{ grand_total_out_sum|intcomma }} UZS</div>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
-            <div style="color: var(--text-secondary);">To'langan:</div>
-            <div style="font-weight: 600; color: #10B981;">{{ total_paid|intcomma }} UZS</div>
+            <div style="color: var(--text-secondary);">Farq (Foyda):</div>
+            <div style="font-weight: 600; color: {% if grand_difference >= 0 %}#10B981{% else %}#EF4444{% endif %};">{{ grand_difference|intcomma }} UZS</div>
         </div>
     </div>
 
