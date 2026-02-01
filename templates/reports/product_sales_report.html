@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 5rem;">
+    
+    <div style="text-align: center; margin-bottom: 2rem;">
+        {% include 'reports/report_nav.html' %}
+        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">{{ title }}</h2>
+        <div style="height: 4px; width: 40px; background: var(--primary-gradient); border-radius: 2px; margin: 0 auto;"></div>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card">
+        <form method="get">
+            <div class="form-group">
+                <label class="form-label">Boshlanish vaqti</label>
+                <input type="text" name="start_date" value="{{ start_date }}" class="form-control flatpickr-input" style="background: var(--input-bg);">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tugash vaqti</label>
+                <input type="text" name="end_date" value="{{ end_date }}" class="form-control flatpickr-input" style="background: var(--input-bg);">
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    flatpickr(".flatpickr-input", {
+                        enableTime: true,
+                        dateFormat: "Y-m-dTH:i:s",
+                        altInput: true,
+                        altFormat: "d/m/Y H:i:s",
+                        time_24hr: true,
+                        allowInput: true,
+                        disableMobile: "true"      
+                    });
+                });
+            </script>
+            <div class="form-group">
+                <label class="form-label">Mahsulotni tanlang (Hamma mahsulot uchun bo'sh qoldiring)</label>
+                <select name="product" class="form-control">
+                    <option value="">--- Barcha Mahsulotlar ---</option>
+                    {% for product in products %}
+                        <option value="{{ product.id }}" {% if selected_product == product.id %}selected{% endif %}>{{ product.name }} [{{ product.unit.name }}]</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary">
+                    <ion-icon name="filter-outline" style="margin-right: 8px;"></ion-icon> Ko'rsatish
+                </button>
+                
+                <!-- Export Button -->
+                <button type="submit" name="export" value="excel" class="btn btn-secondary" style="margin-top:0;">
+                    <ion-icon name="download-outline" style="margin-right: 8px;"></ion-icon> Excel
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Summary -->
+    <div style="margin: 1.5rem 0; background: var(--card-bg); padding: 1rem; border-radius: var(--radius-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <div style="font-size: 0.9rem; color: var(--text-secondary);">Jami savdo:</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: white;">{{ total_sum|intcomma }} UZS</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.9rem;">
+            <div style="color: var(--text-secondary);">To'lanmagan (Qarz):</div>
+            <div style="font-weight: 600; color: #EF4444;">{{ total_unpaid|intcomma }} UZS</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.5rem;">
+            <div style="color: var(--text-secondary);">To'langan:</div>
+            <div style="font-weight: 600; color: #10B981;">{{ total_paid|intcomma }} UZS</div>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    {% if report_data %}
+    
+    <div style="text-align: right; margin-bottom: 0.5rem;">
+        <button type="button" onclick="toggleFullScreen()" class="btn" style="width: auto; padding: 0.5rem 1rem; background: var(--card-bg); color: var(--text-secondary); font-size: 0.9rem;">
+            <ion-icon name="expand-outline" style="margin-right: 5px;"></ion-icon> To'liq ekran
+        </button>
+    </div>
+
+    <div id="reportTableContainer" class="table-container">
+        <!-- Close button for fullscreen mode -->
+        <button onclick="toggleFullScreen()" id="closeFsBtn" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1001; background: rgba(0,0,0,0.5); border: 1px solid white; color: white; border-radius: 50%; width: 40px; height: 40px; align-items: center; justify-content: center; cursor: pointer;">
+            <ion-icon name="close-outline" style="font-size: 1.5rem;"></ion-icon>
+        </button>
+
+        <table class="table-minimal">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Mahsulot</th>
+                    <th class="text-end" style="width: 20%;">Soni<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-secondary);">(Kirim / Chiqim)</span></th>
+                    <th class="text-end" style="width: 20%;">Narxi<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-secondary);">(Kirim / Chiqim)</span></th>
+                    <th class="text-end" style="width: 25%;">Jami<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-secondary);">(Kirim / Chiqim)</span></th>
+                    <th class="text-end" style="width: 15%;">Qoldiq</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in report_data %}
+                <tr onclick="highlightRow(this)" style="cursor: pointer; transition: background 0.2s;">
+                    <td>
+                        <div style="font-weight: 500; width: 15ch; max-width: 100%; white-space: normal; word-wrap: break-word; line-height: 1.4;">{{ item.product.name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">{{ item.product.unit.name }}</div>
+                    </td>
+                    
+                    <!-- Soni (Qty) -->
+                    <td class="text-end">
+                        <div style="color: #10B981; font-weight: 600; padding: 4px; border-bottom: 1px dashed rgba(255,255,255,0.1);">{{ item.in_qty|floatformat:0 }}</div>
+                        <div style="color: #EF4444; font-weight: 600; padding: 4px;">{{ item.out_qty|floatformat:0 }}</div>
+                    </td>
+
+                    <!-- Narxi (Price) -->
+                    <td class="text-end">
+                        <div style="color: #10B981; padding: 4px; border-bottom: 1px dashed rgba(255,255,255,0.1);">{{ item.in_price|floatformat:0 }}</div>
+                        <div style="color: #EF4444; padding: 4px;">{{ item.out_price|floatformat:0 }}</div>
+                    </td>
+
+                    <!-- Jami (Sum) -->
+                    <td class="text-end">
+                        <div style="color: #10B981; font-weight: 600; padding: 4px; border-bottom: 1px dashed rgba(255,255,255,0.1);">{{ item.in_sum|floatformat:0 }}</div>
+                        <div style="color: #EF4444; font-weight: 600; padding: 4px;">{{ item.out_sum|floatformat:0 }}</div>
+                    </td>
+
+                    <!-- Qoldiq -->
+                    <td class="text-end" style="vertical-align: middle;">
+                        <span class="badge {% if item.remaining > 0 %}bg-soft-success text-success{% else %}bg-soft-danger text-danger{% endif %}">
+                            {{ item.remaining|floatformat:0 }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">
+                        <i class="ion ion-search" style="font-size: 2rem;"></i>
+                        <p>Ma'lumot topilmadi</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
+            <ion-icon name="search-outline" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></ion-icon>
+            <p>Hech narsa topilmadi.</p>
+        </div>
+    {% endif %}
+
+</div>
+
+<style>
+    /* Fullscreen Mode Styles */
+    .fullscreen-active {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 1000;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 2rem !important;
+        background: var(--bg-color) !important;
+        overflow-y: auto;
+    }
+</style>
+
+<script>
+    function toggleFullScreen() {
+        var container = document.getElementById('reportTableContainer');
+        var closeBtn = document.getElementById('closeFsBtn');
+        
+        if (container.classList.contains('fullscreen-active')) {
+            container.classList.remove('fullscreen-active');
+            closeBtn.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Enable scroll
+        } else {
+            container.classList.add('fullscreen-active');
+            closeBtn.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Disable scroll on body
+        }
+    }
+</script>
+
+<script>
+    function highlightRow(row) {
+        // Remove highlight from all rows
+        const rows = document.querySelectorAll('.table-minimal tbody tr');
+        rows.forEach(r => r.classList.remove('highlighted-row'));
+        
+        // Add highlight to clicked row
+        row.classList.add('highlighted-row');
+    }
+</script>
+
+<style>
+    .highlighted-row {
+        background-color: rgba(59, 130, 246, 0.2) !important; /* Blue tint */
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Hero Card: Total Balance / KPI -->
+<div class="hero-card">
+    <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.5rem;">Bugungi Savdo (Chiqim)</div>
+    <div style="font-size: 2.5rem; font-weight: 700;">{{ today_output|default:0|intcomma }} UZS</div>
+    
+    <div style="display: flex; justify-content: space-between; margin-top: 1rem; font-size: 0.9rem;">
+        <div>
+            <div style="opacity: 0.7;">Umumiy Kirim</div>
+            <div style="font-weight: 600; color: #10B981;">{{ total_input|default:0|intcomma }} UZS</div>
+        </div>
+        <div style="text-align: right;">
+            <div style="opacity: 0.7;">Qoldiq (Kirim - Chiqim)</div>
+            <div style="font-weight: 600; color: #10B981;">{{ general_diff|default:0|intcomma }} UZS</div>
+        </div>
+    </div>
+    
+    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <a href="{% url 'input_list' %}" style="flex:1; background: rgba(255,255,255,0.2); border:none; padding: 0.75rem; border-radius: 1rem; color: white; text-decoration: none; text-align: center; font-size: 0.9rem; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <ion-icon name="list-outline"></ion-icon> Kirim (List)
+        </a>
+        <a href="{% url 'output_list' %}" style="flex:1; background: rgba(255,255,255,0.2); border:none; padding: 0.75rem; border-radius: 1rem; color: white; text-decoration: none; text-align: center; font-size: 0.9rem; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <ion-icon name="list-outline"></ion-icon> Chiqim (List)
+        </a>
+    </div>
+</div>
+
+<!-- Quick Actions Grid (Horizontal Scroll) -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <h3 style="font-size: 1.1rem;">Quick Actions</h3>
+    <a href="#" style="font-size: 0.9rem; color: var(--primary-color); text-decoration: none;">See all</a>
+</div>
+
+<div class="action-grid">
+    <a href="{% url 'add_product' %}" class="action-btn">
+        <div class="action-icon-box">
+            <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <span class="action-label">Products</span>
+    </a>
+    
+    <a href="{% url 'add_customer' %}" class="action-btn">
+        <div class="action-icon-box">
+            <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <span class="action-label">People</span>
+    </a>
+
+    <a href="{% url 'add_unit' %}" class="action-btn">
+        <div class="action-icon-box">
+            <ion-icon name="scale-outline"></ion-icon>
+        </div>
+        <span class="action-label">Units</span>
+    </a>
+
+    <!-- Duplicate for scroll effect demo -->
+    <a href="#" class="action-btn">
+        <div class="action-icon-box" style="color: var(--text-secondary);">
+            <ion-icon name="ellipsis-horizontal"></ion-icon>
+        </div>
+        <span class="action-label">More</span>
+    </a>
+</div>
+
+<!-- Recent Transactions / Stats -->
+<h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Overview</h3>
+
+<div class="card" style="padding: 0;">
+    <div style="padding: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); color: var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                <ion-icon name="people"></ion-icon>
+            </div>
+            <div>
+                <div style="font-weight: 600;">Total Customers</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">Active database</div>
+            </div>
+        </div>
+        <div style="font-weight: 600;">{{ customer_count }}</div>
+    </div>
+</div>
+{% endblock %}

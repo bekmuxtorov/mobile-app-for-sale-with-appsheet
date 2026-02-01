@@ -1,0 +1,8 @@
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 5px;">
+    <a href="{% url 'customer_sales_report' %}" class="btn {% if request.resolver_match.url_name == 'customer_sales_report' %}btn-primary{% else %}btn-secondary{% endif %}" style="margin-top:0; white-space:nowrap; width:auto; font-size: 0.9rem;">
+        Mijozlar hisoboti
+    </a>
+    <a href="{% url 'product_sales_report' %}" class="btn {% if request.resolver_match.url_name == 'product_sales_report' %}btn-primary{% else %}btn-secondary{% endif %}" style="margin-top:0; white-space:nowrap; width:auto; font-size: 0.9rem;">
+        Tovar aylanma
+    </a>
+</div>
