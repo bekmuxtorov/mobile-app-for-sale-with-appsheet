@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Unit{% endblock %}
+
+{% block content %}
+<div class="header" style="justify-content: flex-start; gap: 1rem;">
+    <a href="{% url 'unit_list' %}"
+        style="width: 40px; height: 40px; background: var(--card-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+    </a>
+    <h2 style="margin: 0;">Edit Unit</h2>
+</div>
+
+<form method="post" class="card" style="padding-bottom: 2rem;">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label class="form-label">Unit Name</label>
+        <input type="text" name="name" class="form-control" value="{{ unit.name }}" required>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3">{{ unit.description|default:'' }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+        Save Changes
+    </button>
+</form>
+
+{% endblock %}

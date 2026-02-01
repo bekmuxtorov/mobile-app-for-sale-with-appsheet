@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Units{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div style="flex:1;">
+        <h2 style="margin-bottom: 0.25rem;">Units</h2>
+        <div style="font-size: 0.9rem; color: var(--text-secondary);">Measurement Units</div>
+    </div>
+</div>
+
+<!-- Search -->
+<div style="margin-bottom: 1.5rem;">
+    <input type="text" class="form-control" placeholder="Search units..." id="searchInput">
+</div>
+
+<!-- List -->
+<div id="unitList" style="padding-bottom: 80px;">
+    {% for unit in units %}
+    <a href="{% url 'unit_detail' unit.id %}" class="card"
+        style="display: flex; align-items: center; gap: 1rem; text-decoration: none; padding: 1rem; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.05);">
+        <div
+            style="width: 50px; height: 50px; background: rgba(99, 102, 241, 0.1); color: #6366F1; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+            <ion-icon name="scale-outline"></ion-icon>
+        </div>
+        <div style="flex: 1;">
+            <div style="font-weight: 600; color: white; margin-bottom: 0.25rem;">{{ unit.name }}</div>
+            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                {{ unit.description|default:""|truncatechars:30 }}
+            </div>
+        </div>
+        <div style="color: var(--text-secondary);">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+    </a>
+    {% empty %}
+    <div style="text-align: center; padding: 3rem 0; color: var(--text-secondary);">
+        <ion-icon name="scale-outline" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></ion-icon>
+        <p>No units found.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- FAB -->
+<a href="{% url 'add_unit' %}"
+    style="position: fixed; bottom: 100px; right: 20px; width: 56px; height: 56px; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.75rem; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); z-index: 90;">
+    <ion-icon name="add-outline"></ion-icon>
+</a>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        let filter = this.value.toLowerCase();
+        let cards = document.querySelectorAll('#unitList .card');
+
+        cards.forEach(card => {
+            let text = card.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+{% endblock %}

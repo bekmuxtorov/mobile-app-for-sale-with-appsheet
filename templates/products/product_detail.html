@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Product{% endblock %}
+
+{% block content %}
+<div class="header" style="justify-content: flex-start; gap: 1rem;">
+    <a href="{% url 'product_list' %}"
+        style="width: 40px; height: 40px; background: var(--card-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+    </a>
+    <h2 style="margin: 0;">Edit Product</h2>
+</div>
+
+<form method="post" class="card" style="padding-bottom: 2rem;">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label class="form-label">Product Name</label>
+        <input type="text" name="name" class="form-control" value="{{ product.name }}" required>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Unit</label>
+        <select name="unit" class="form-control" style="width: 100%;">
+            <option value="">---------</option>
+            {% for unit in units %}
+            <option value="{{ unit.id }}" {% if product.unit_id==unit.id %}selected{% endif %}>{{ unit.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Price (UZS)</label>
+        <input type="number" step="0.01" name="price" class="form-control"
+            value="{{ product.price|stringformat:'.2f' }}">
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="3">{{ product.description|default:'' }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+        Save Changes
+    </button>
+</form>
+
+{% endblock %}
